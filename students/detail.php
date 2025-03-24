@@ -8,10 +8,6 @@ if (!isset($_GET['id'])) {
 
 $controller = new SinhVienController($conn);
 $student = $controller->detail($_GET['id']);
-
-
-$defaultImage = '/uploads/default.jpg';
-$studentImage = !empty($student['Hinh']) ? htmlspecialchars($student['Hinh']) : $defaultImage;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +21,7 @@ $studentImage = !empty($student['Hinh']) ? htmlspecialchars($student['Hinh']) : 
     <div class="container">
         <h1>Chi Tiết Sinh Viên</h1>
         <div class="student-detail">
-            <img src="<?php echo $studentImage; ?>" alt="Hình Sinh Viên" class="student-image">
+            <img src="<?php echo htmlspecialchars($student['Hinh']); ?>" alt="Hình Sinh Viên" class="student-image">
             <p><strong>Mã Sinh Viên:</strong> <?php echo htmlspecialchars($student['MaSV']); ?></p>
             <p><strong>Họ Tên:</strong> <?php echo htmlspecialchars($student['HoTen']); ?></p>
             <p><strong>Giới Tính:</strong> <?php echo htmlspecialchars($student['GioiTinh']); ?></p>

@@ -61,7 +61,6 @@ class SinhVienModel {
         return $stmt->execute();
     }
 
-    // Xóa sinh viên
     public function delete($MaSV) {
         $sql = "DELETE FROM SinhVien WHERE MaSV = ?";
         $stmt = $this->conn->prepare($sql);

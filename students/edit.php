@@ -1,20 +1,17 @@
 <?php
 include '../config/database.php';
 include '../controllers/SinhVienController.php';
-
-$controller = new SinhVienController($conn);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $controller->update($_POST, $_FILES);
-    header('Location: index.php');
-    exit();
-}
+include '../controllers/NganhController.php';
 
 if (!isset($_GET['id'])) {
     die('Không có mã sinh viên được cung cấp.');
 }
 
+$controller = new SinhVienController($conn);
+$nganhController = new NganhController($conn);
+
 $student = $controller->detail($_GET['id']);
+$nganhs = $nganhController->index(); // Lấy danh sách ngành học
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,8 +39,15 @@ $student = $controller->detail($_GET['id']);
             <label for="NgaySinh">Ngày Sinh:</label>
             <input type="date" id="NgaySinh" name="NgaySinh" value="<?php echo htmlspecialchars($student['NgaySinh']); ?>" required>
 
-            <label for="MaNganh">Mã Ngành:</label>
-            <input type="text" id="MaNganh" name="MaNganh" value="<?php echo htmlspecialchars($student['MaNganh']); ?>" required>
+                        <label for="MaNganh">Ngành:</label>
+            <select id="MaNganh" name="MaNganh" required>
+                <?php foreach ($nganhs as $nganh): ?>
+                    <option value="<?php echo htmlspecialchars($nganh['MaNganh']); ?>" 
+                        <?php echo (($student['MaNganh'] ?? '') == $nganh['MaNganh']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($nganh['TenNganh']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
             <label for="Hinh">Hình Ảnh:</label>
             <input type="file" id="Hinh" name="Hinh">
@@ -52,4 +56,4 @@ $student = $controller->detail($_GET['id']);
         </form>
     </div>
 </body>
-</html>
+</html> 
